@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  role     String
+  profile  Profile?
+  articles Article[]
+}
+
+model Profile {
+  id         Int    @id @default(autoincrement())
+  displayName String
+  bio        String
+  secretMemo String
+  userId     Int    @unique
+  user       User   @relation(fields: [userId], references: [id])
+}
+
+model Article {
+  id        Int     @id @default(autoincrement())
+  title     String  @unique
+  body      String
+  published Boolean @default(true)
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id])
+
+  @@index([published])
+}

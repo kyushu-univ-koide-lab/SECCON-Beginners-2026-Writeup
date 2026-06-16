@@ -1,0 +1,10 @@
+version: '3'
+services:
+  rop4b:
+    build:
+      context: .
+    restart: always
+    container_name: rop4b
+    privileged: true
+    ports:
+      - "9082:5000"

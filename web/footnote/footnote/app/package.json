@@ -1,0 +1,22 @@
+{
+  "name": "footnote",
+  "version": "1.0.0",
+  "description": "SECCON Beginners CTF 2026 web challenge footnote",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "prisma migrate deploy && prisma db seed && node dist/server.js"
+  },
+  "dependencies": {
+    "@prisma/adapter-better-sqlite3": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "@types/express": "5.0.6",
+    "@types/node": "25.9.1",
+    "express": "5.2.1",
+    "express-rate-limit": "8.5.2",
+    "prisma": "7.8.0",
+    "tsx": "4.22.3",
+    "typescript": "6.0.3"
+  }
+}

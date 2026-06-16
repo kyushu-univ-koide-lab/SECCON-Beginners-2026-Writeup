@@ -1,0 +1,17 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ .
+COPY public/ ./public
+
+ENV FLAG="ctf4b{dummy_flag}"
+EXPOSE 8000
+
+CMD ["gunicorn", "-w", "1", "--threads", "16", "-b", "0.0.0.0:8000", "app:app"]

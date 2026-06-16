@@ -1,0 +1,25 @@
+services:
+  app:
+    build: ./app
+    environment:
+      PORT: 44566
+      FLAG: ${FLAG:-ctf4b{dummy_flag}}
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-1}
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  nginx:
+    build: ./nginx
+    ports:
+      - 44566:80
+    depends_on:
+      - app
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

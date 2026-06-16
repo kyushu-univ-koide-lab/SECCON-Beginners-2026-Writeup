@@ -1,0 +1,48 @@
+services:
+  proxy:
+    image: nginx:1.27-alpine
+    restart: always
+    depends_on:
+      - web1
+      - web2
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+
+  web1:
+    build: .
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      INSTANCE_ID: "web1"
+      FLAG: "ctf4b{**REDACTED**}"
+      PORT: "3000"
+      BOT_BASE_URL: "http://127.0.0.1:3000"
+      REDIS_URL: "redis://redis:6379"
+      TRUST_PROXY: "1"
+      REPORT_WORKERS: "3"
+      MAX_REPORT_QUEUE: "12"
+      REPORT_JOB_TIMEOUT_MS: "15000"
+
+  web2:
+    build: .
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      INSTANCE_ID: "web2"
+      FLAG: "ctf4b{**REDACTED**}"
+      PORT: "3000"
+      BOT_BASE_URL: "http://127.0.0.1:3000"
+      REDIS_URL: "redis://redis:6379"
+      TRUST_PROXY: "1"
+      REPORT_WORKERS: "3"
+      MAX_REPORT_QUEUE: "12"
+      REPORT_JOB_TIMEOUT_MS: "15000"

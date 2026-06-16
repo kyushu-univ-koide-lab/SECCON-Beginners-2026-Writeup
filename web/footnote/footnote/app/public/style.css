@@ -1,0 +1,179 @@
+html {
+  background: #e8e8e8;
+}
+
+body {
+  margin: 0;
+  color: #000000;
+  background: #e8e8e8;
+  font-family: "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: 19px;
+  line-height: 1.55;
+}
+
+a {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #551a8b;
+}
+
+.page {
+  width: 840px;
+  margin: 10px auto 24px;
+  background: #f7f7ef;
+  border: 1px solid #999999;
+}
+
+.page > tbody > tr > td {
+  padding: 12px 14px;
+}
+
+.header {
+  background: #d8d8c8;
+  border: 1px solid #a8a898;
+}
+
+.header td {
+  padding: 8px 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 44px;
+  font-weight: normal;
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 17px;
+}
+
+hr {
+  height: 1px;
+  margin: 12px 0;
+  color: #999999;
+  background: #999999;
+  border: 0;
+}
+
+.side {
+  width: 220px;
+  padding: 8px 14px 8px 0;
+  border-right: 1px solid #b8b8a8;
+}
+
+.menu-title {
+  margin: 0 0 4px;
+  font-weight: bold;
+}
+
+ul {
+  margin: 0 0 16px 18px;
+  padding: 0;
+}
+
+.note {
+  margin: 0;
+  color: #444444;
+  font-size: 16px;
+}
+
+.main {
+  padding: 4px 0 4px 16px;
+}
+
+.search-form {
+  margin: 0 0 14px;
+  padding: 8px;
+  background: #eeeedd;
+  border: 1px solid #b8b8a8;
+}
+
+.search-form label {
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.search-form input {
+  width: 250px;
+  max-width: 60%;
+  font: inherit;
+  border: 1px solid #888888;
+  background: #ffffff;
+}
+
+.search-form button {
+  margin-left: 6px;
+  font: inherit;
+}
+
+h2 {
+  margin: 0 0 10px;
+  color: #660000;
+  font-size: 28px;
+  font-weight: normal;
+}
+
+.article {
+  margin: 0 0 14px;
+  padding: 0 0 12px;
+  border-bottom: 1px dotted #999999;
+}
+
+.article h3 {
+  margin: 0 0 4px;
+  font-size: 23px;
+  font-weight: normal;
+}
+
+.article p {
+  margin: 4px 0;
+}
+
+.about {
+  margin: 4px 0 0;
+}
+
+.author {
+  color: #333333;
+  font-size: 16px;
+}
+
+.footer {
+  margin: 0;
+  text-align: right;
+  font-size: 15px;
+  color: #555555;
+}
+
+@media (max-width: 880px) {
+  .page {
+    width: calc(100% - 16px);
+  }
+
+  .header,
+  .header tbody,
+  .header tr,
+  .header td,
+  .page table,
+  .page tbody,
+  .page tr,
+  .side,
+  .main {
+    display: block;
+    width: auto;
+  }
+
+  .side {
+    padding: 0 0 10px;
+    border-right: 0;
+    border-bottom: 1px solid #b8b8a8;
+  }
+
+  .main {
+    padding: 12px 0 0;
+  }
+}

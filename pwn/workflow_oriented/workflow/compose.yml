@@ -1,0 +1,9 @@
+services:
+  workflow:
+    build:
+      context: .
+    restart: always 
+    container_name: workflow
+    privileged: true
+    ports:
+      - "9095:5000"

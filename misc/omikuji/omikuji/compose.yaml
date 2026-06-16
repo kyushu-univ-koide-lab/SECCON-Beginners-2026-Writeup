@@ -1,0 +1,13 @@
+services:
+  omikuji:
+    build:
+      context: .
+    environment:
+      FLAG: ctf4b{dummy_flag}
+    working_dir: /home/ctf/omikuji
+    restart: always
+    mem_limit: 768m
+    cpus: "0.50"
+    pids_limit: 384
+    ports:
+      - "33457:33457"

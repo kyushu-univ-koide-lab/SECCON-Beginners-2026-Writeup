@@ -1,0 +1,11 @@
+services:
+  viewer:
+    build:
+      context: .
+    working_dir: /app
+    restart: always
+    mem_limit: 768m
+    cpus: "0.50"
+    pids_limit: 384
+    ports:
+      - "33458:33458"

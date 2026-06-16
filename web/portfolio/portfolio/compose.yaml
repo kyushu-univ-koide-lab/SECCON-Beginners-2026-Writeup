@@ -1,0 +1,13 @@
+services:
+  app:
+    build: ./app
+    environment:
+      PORT: 33455
+    restart: always
+  nginx:
+    build: ./nginx
+    ports:
+      - 33455:80
+    depends_on:
+      - app
+    restart: always

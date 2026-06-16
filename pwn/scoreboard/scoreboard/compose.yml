@@ -1,0 +1,10 @@
+version: '3'
+services:
+  scoreboard:
+    build:
+      context: .
+    restart: always
+    container_name: scoreboard
+    privileged: true
+    ports:
+      - "9090:5000"

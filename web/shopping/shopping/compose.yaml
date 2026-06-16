@@ -1,0 +1,8 @@
+services:
+  coupon-racer:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      FLAG: "ctf4b{dummy_flag}"
+    restart: always

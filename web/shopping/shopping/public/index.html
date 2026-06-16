@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ポイント交換所</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7f9;
+      color: #1d2733;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+    main {
+      width: min(460px, calc(100vw - 32px));
+      border: 1px solid #d6dbe3;
+      border-radius: 8px;
+      padding: 24px;
+      background: #ffffff;
+      box-shadow: 0 12px 32px rgb(24 32 44 / 10%);
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+    dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 16px;
+      margin: 0 0 20px;
+    }
+    dt { color: #5c6877; }
+    dd { margin: 0; font-weight: 650; text-align: right; }
+    form { display: grid; gap: 10px; margin-top: 12px; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 42px;
+      border-radius: 6px;
+      font: inherit;
+    }
+    input {
+      border: 1px solid #c7ced8;
+      padding: 0 12px;
+    }
+    button {
+      border: 0;
+      color: #fff;
+      background: #125f8f;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary { background: #2f4858; }
+    button.tertiary {
+      color: #2f4858;
+      background: #e8edf2;
+    }
+    .products {
+      display: grid;
+      gap: 8px;
+      margin: 18px 0 16px;
+    }
+    .product {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px 12px;
+      align-items: center;
+      border: 1px solid #d6dbe3;
+      border-radius: 6px;
+      padding: 12px;
+    }
+    .product strong { font-size: 15px; }
+    .product span {
+      color: #687586;
+      font-size: 13px;
+    }
+    .product form {
+      margin: 0;
+      min-width: 112px;
+    }
+    .product button {
+      min-height: 34px;
+      padding: 0 10px;
+      font-size: 13px;
+    }
+    .badge {
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #e8edf2;
+      color: #2f4858;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status {
+      min-height: 20px;
+      margin: 16px 0 0;
+      color: #425060;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    .hint {
+      margin: 10px 0 0;
+      color: #687586;
+      font-size: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { background: #111820; color: #e9eef5; }
+      main { background: #17212b; border-color: #2b3948; box-shadow: none; }
+      input { background: #101820; border-color: #3b4a5a; color: #e9eef5; }
+      button.tertiary { color: #e9eef5; background: #344454; }
+      dt, .hint { color: #aab5c2; }
+      .status { color: #c2ccd8; }
+      .product { border-color: #2b3948; }
+      .product span { color: #aab5c2; }
+      .badge { color: #e9eef5; background: #344454; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>ポイント交換所</h1>
+    <dl>
+      <dt>ポイント</dt><dd><span id="balance">{{ balance }}</span> pt</dd>
+      <dt>会員ランク</dt><dd>{{ wallet_status }}</dd>
+      <dt>クーポンコード</dt><dd>SPECIAL_VOUCHER_FOR_CTF4B</dd>
+    </dl>
+
+    <section class="products" aria-label="商品一覧">
+      <div class="product">
+        <div>
+          <strong>flag</strong>
+          <span>{{ flag_price }} pt</span>
+        </div>
+        <form action="{{ url_for('cart_quote') }}" method="post" data-json data-quote-form>
+          <input type="hidden" name="item" value="flag">
+          <button type="submit">交換コードを発行</button>
+        </form>
+      </div>
+      <div class="product">
+        <div>
+          <strong>secret</strong>
+          <span>{{ secret_price }} pt</span>
+        </div>
+        <form action="{{ url_for('cart_quote') }}" method="post" data-json data-quote-form>
+          <input type="hidden" name="item" value="secret">
+          <button type="submit">交換コードを発行</button>
+        </form>
+      </div>
+    </section>
+
+    <form action="{{ url_for('redeem') }}" method="post" data-json>
+      <input name="code" value="SPECIAL_VOUCHER_FOR_CTF4B" autocomplete="off" aria-label="クーポンコード">
+      <button type="submit">クーポンを使う</button>
+    </form>
+
+    <form action="{{ url_for('support_statement') }}" method="post" data-json>
+      <button class="secondary" type="submit">ポイントを反映する</button>
+    </form>
+
+    <input id="quote" name="quote" placeholder="交換コード" autocomplete="off" aria-label="交換コード">
+
+    <form action="{{ url_for('exchange_item') }}" method="post" data-json data-use-quote>
+      <input type="hidden" name="quote">
+      <button class="secondary" type="submit">交換する</button>
+    </form>
+
+    <form action="{{ url_for('new_wallet') }}" method="post">
+      <button class="tertiary" type="submit">新しいウォレット</button>
+    </form>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <p class="hint">クーポンは1回だけ使えます。商品交換には交換コードが必要です。</p>
+  </main>
+
+  <script>
+    const statusLine = document.querySelector("#status");
+    const quoteInput = document.querySelector("#quote");
+    const balanceValue = document.querySelector("#balance");
+
+    function setStatus(text) {
+      statusLine.textContent = text;
+    }
+
+    function setReward(message, url) {
+      statusLine.textContent = `${message}: `;
+      const link = document.createElement("a");
+      link.href = url;
+      link.textContent = url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      statusLine.appendChild(link);
+    }
+
+    for (const form of document.querySelectorAll("form[data-json]")) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = form.querySelector("button");
+        button.disabled = true;
+
+        try {
+          if (form.dataset.useQuote !== undefined) {
+            form.querySelector("input[name='quote']").value = quoteInput.value;
+          }
+
+          const body = Object.fromEntries(new FormData(form).entries());
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+          const data = await response.json();
+
+          if (data.flag) {
+            setStatus(data.flag);
+          } else if (data.quote) {
+            quoteInput.value = data.quote;
+            const item = data.item === "secret" ? "secret" : "flag";
+            setStatus(`${item} の交換コードを発行しました。`);
+          } else if (data.reward) {
+            setReward(data.message, data.reward);
+          } else if (data.message) {
+            setStatus(data.message);
+          } else if (data.error) {
+            setStatus(data.error);
+          } else if (form.dataset.quoteForm !== undefined) {
+            setStatus("交換コードはまだ発行できません。");
+          } else {
+            setStatus("受付しました。");
+          }
+
+          if (data.balance !== undefined) {
+            balanceValue.textContent = data.balance;
+          }
+        } catch {
+          setStatus("処理に失敗しました。");
+        } finally {
+          button.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

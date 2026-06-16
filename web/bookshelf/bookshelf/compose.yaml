@@ -1,0 +1,13 @@
+services:
+  app:
+    build: ./app
+    environment:
+      FLAG: ctf4b{dummy_flag}
+    restart: always
+  nginx:
+    build: ./nginx
+    ports:
+      - 33456:80
+    depends_on:
+      - app
+    restart: always

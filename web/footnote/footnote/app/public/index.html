@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>footnote - 記事一覧</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <center>
+      <table class="page" cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <table class="header" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <h1>footnote</h1>
+                  <p class="subtitle">小さな記事と著者の覚え書き</p>
+                </td>
+              </tr>
+            </table>
+
+            <hr>
+
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="side" valign="top">
+                  <p class="menu-title">メニュー</p>
+                  <ul>
+                    <li><a href="/">記事一覧</a></li>
+                    <li><a href="#about">このサイトについて</a></li>
+                  </ul>
+                  <p class="note">
+                    記事には、著者による短い footnote が添えられています。
+                  </p>
+                </td>
+                <td class="main" valign="top">
+                  <h2>記事一覧</h2>
+                  <form id="search-form" class="search-form">
+                    <label for="q">検索</label>
+                    <input id="q" name="q" type="search" autocomplete="off">
+                    <button type="submit">探す</button>
+                  </form>
+                  <div id="articles" aria-live="polite">
+                    <p>読み込み中...</p>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <hr>
+            <h2 id="about">このサイトについて</h2>
+            <p class="about">
+              footnote は、日々の小さな記事を集めた私設の編集室です。
+              本文に書ききれなかった著者の覚え書きも、記事と一緒に整理しています。
+            </p>
+
+            <hr>
+            <p class="footer">footnote 編集室</p>
+          </td>
+        </tr>
+      </table>
+    </center>
+
+    <script>
+      const articlesEl = document.querySelector("#articles");
+      const form = document.querySelector("#search-form");
+      const input = document.querySelector("#q");
+
+      function excerpt(body) {
+        if (body.length <= 120) {
+          return body;
+        }
+        return `${body.slice(0, 120)}...`;
+      }
+
+      function renderArticle(article) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "article";
+
+        const title = document.createElement("h3");
+        title.textContent = article.title;
+
+        const body = document.createElement("p");
+        body.textContent = excerpt(article.body);
+
+        const author = document.createElement("p");
+        author.className = "author";
+        author.textContent =
+          "著者: " +
+          (article.author?.profile?.displayName ?? "anonymous contributor");
+
+        wrapper.append(title, body, author);
+        return wrapper;
+      }
+
+      async function loadArticles(q = "") {
+        const params = new URLSearchParams();
+        if (q) {
+          params.set("q", q);
+        }
+
+        const url = params.toString()
+          ? `/api/articles/search?${params.toString()}`
+          : "/api/articles/search";
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error("failed to load articles");
+        }
+        return res.json();
+      }
+
+      function renderArticles(data) {
+        if (data.count === 0) {
+          articlesEl.innerHTML = "<p>該当する記事はありません。</p>";
+          return;
+        }
+
+        articlesEl.replaceChildren(...data.articles.map(renderArticle));
+      }
+
+      loadArticles()
+        .then(renderArticles)
+        .catch(() => {
+          articlesEl.innerHTML = "<p>記事を読み込めませんでした。</p>";
+        });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        articlesEl.innerHTML = "<p>検索中...</p>";
+        loadArticles(input.value.trim())
+          .then(renderArticles)
+          .catch(() => {
+            articlesEl.innerHTML = "<p>検索に失敗しました。</p>";
+          });
+      });
+    </script>
+  </body>
+</html>

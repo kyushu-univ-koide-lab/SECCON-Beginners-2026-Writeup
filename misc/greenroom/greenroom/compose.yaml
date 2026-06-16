@@ -1,0 +1,21 @@
+services:
+  greenroom:
+    build:
+      context: .
+    working_dir: /app
+    restart: always
+    init: true
+    read_only: true
+    pids_limit: 384
+    mem_limit: 768m
+    cpus: "0.50"
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "46777:46777"
+    environment:
+      FLAG: "ctf4b{dummy_flag}"
